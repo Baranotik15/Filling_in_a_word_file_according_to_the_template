@@ -2,7 +2,6 @@ import tkinter as tk
 from tkinter import messagebox, filedialog
 from docx import Document
 from docx.shared import Inches
-from docx.enum.text import WD_ALIGN_PARAGRAPH
 from PIL import Image
 import os
 import random
@@ -20,9 +19,8 @@ def select_template():
     )
     if not file_path:
         return
-
     template_path = file_path
-    template_label.config(text=f"Шаблон: {os.path.basename(file_path)}")
+    template_label.config(text=os.path.basename(file_path))
 
 
 def select_logo():
@@ -33,12 +31,11 @@ def select_logo():
     )
     if not file_path:
         return
-
     logo_path = file_path
-    logo_label.config(text=f"Логотип: {os.path.basename(file_path)}")
+    logo_label.config(text=os.path.basename(file_path))
 
 
-def resize_logo(src, dst, size=(50, 50)):
+def resize_logo(src, dst, size=(125, 125)):
     img = Image.open(src)
     img = img.resize(size, Image.Resampling.LANCZOS)
     img.save(dst)
@@ -91,18 +88,10 @@ def generate_doc():
                 for cell in row.cells:
                     if "{{LOGO}}" in cell.text:
                         cell.text = ""
-
-                        paragraph = cell.paragraphs[0]
-                        paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-
-                        run = paragraph.add_run()
-                        run.add_picture(
-                            temp_logo,
-                            width=Inches(1),
-                            height=Inches(1)
-                        )
-
-                        paragraph.paragraph_format.right_indent = Inches(0.15)
+                        p = cell.paragraphs[0]
+                        p.alignment = 2
+                        run = p.add_run()
+                        run.add_picture(temp_logo, width=Inches(1.3), height=Inches(1.3))
 
         os.remove(temp_logo)
 
@@ -114,31 +103,50 @@ def generate_doc():
 
 root = tk.Tk()
 root.title("Генератор документов")
-root.geometry("700x520")
+root.geometry("620x420")
 
-tk.Button(root, text="Выбрать шаблон", command=select_template).pack(pady=5)
-template_label = tk.Label(root, text="Шаблон не выбран")
-template_label.pack()
+main = tk.Frame(root, padx=15, pady=15)
+main.pack(fill="both", expand=True)
 
-tk.Button(root, text="Выбрать логотип", command=select_logo).pack(pady=5)
-logo_label = tk.Label(root, text="Логотип не выбран")
-logo_label.pack()
+files_frame = tk.LabelFrame(main, text="Файлы", padx=10, pady=10)
+files_frame.pack(fill="x")
 
-tk.Label(root, text="Дата:").pack(anchor="w", padx=10)
-date_input = tk.Entry(root); date_input.pack(fill="x", padx=10)
+tk.Button(files_frame, text="Выбрать шаблон", width=18, command=select_template)\
+    .grid(row=0, column=0, padx=5)
+template_label = tk.Label(files_frame, text="шаблон не выбран", fg="gray")
+template_label.grid(row=0, column=1, sticky="w")
 
-tk.Label(root, text="Имя:").pack(anchor="w", padx=10)
-name_input = tk.Entry(root); name_input.pack(fill="x", padx=10)
+tk.Button(files_frame, text="Выбрать логотип", width=18, command=select_logo)\
+    .grid(row=1, column=0, padx=5, pady=4)
+logo_label = tk.Label(files_frame, text="логотип не выбран", fg="gray")
+logo_label.grid(row=1, column=1, sticky="w")
 
-tk.Label(root, text="Пол:").pack(anchor="w", padx=10)
-gender_input = tk.Entry(root); gender_input.pack(fill="x", padx=10)
+form = tk.LabelFrame(main, text="Данные", padx=10, pady=10)
+form.pack(fill="x", pady=10)
 
-tk.Label(root, text="Возраст:").pack(anchor="w", padx=10)
-age_input = tk.Entry(root); age_input.pack(fill="x", padx=10)
+tk.Label(form, text="Дата:").grid(row=0, column=0, sticky="w")
+date_input = tk.Entry(form)
+date_input.grid(row=0, column=1, sticky="ew", padx=5)
 
-tk.Label(root, text="Название файла (без .docx):").pack(anchor="w", padx=10)
-file_input = tk.Entry(root); file_input.pack(fill="x", padx=10)
+tk.Label(form, text="Имя:").grid(row=1, column=0, sticky="w")
+name_input = tk.Entry(form)
+name_input.grid(row=1, column=1, sticky="ew", padx=5)
 
-tk.Button(root, text="Создать документ", command=generate_doc).pack(pady=15)
+tk.Label(form, text="Пол:").grid(row=2, column=0, sticky="w")
+gender_input = tk.Entry(form)
+gender_input.grid(row=2, column=1, sticky="ew", padx=5)
+
+tk.Label(form, text="Возраст:").grid(row=3, column=0, sticky="w")
+age_input = tk.Entry(form)
+age_input.grid(row=3, column=1, sticky="ew", padx=5)
+
+tk.Label(form, text="Название файла (без .docx):").grid(row=4, column=0, sticky="w")
+file_input = tk.Entry(form)
+file_input.grid(row=4, column=1, sticky="ew", padx=5)
+
+form.columnconfigure(1, weight=1)
+
+tk.Button(main, text="Создать документ", width=22, command=generate_doc)\
+    .pack(pady=10)
 
 root.mainloop()
