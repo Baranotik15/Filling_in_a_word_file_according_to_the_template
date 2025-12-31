@@ -1,72 +1,80 @@
-📘 Application User Guide
-Word Template Auto-Filler
+# 🧾 Word Template Auto-Filler
 
-This application allows you to automatically generate Microsoft Word documents based on a prepared template. The program replaces placeholders inside the document with the values entered by the user.
+This application allows you to automatically generate Microsoft Word
+documents from a prepared template.
+The program replaces placeholders in the document with the values
+entered by the user.
 
-🟢 How to use the application
+------------------------------------------------------------------------
 
-Run the program
-Open the application (app.exe).
+## 🚀 How to Use
 
-Select a template file
-Click the button “Select template” and choose a .docx file that contains placeholders
-(for example: {{NAME}}, {{AGE}}, {{DATE}}, etc.).
+### 1️⃣ Run the application
+Launch app.exe.
 
-Fill in the fields
-Enter the required information:
+### #️⃣ Select a template
+Click “Select template” and choose a .docx file that contains
+placeholders
+(for example: {{NAME}}, {{AGE}}, {{DATE}}).
 
-Date
+### 3️⃣ Fill in the fields - Date
+- Name
+- Gender
+- Age
+- Output file name (without .docx)
 
-Name
+### 4️⃣ Generate the document
+Click “Create document” — the program will replace all placeholders in
+the template.
 
-Gender
+### 5️⃣ Result
+A new Word file will be created in the same folder under the name you
+specified.
 
-Age
+------------------------------------------------------------------------
 
-Output file name (without .docx)
+## 📄 Template Format
 
-Generate the document
-Click “Create document”.
-The program will replace all placeholders in the template with the values you provided.
+Placeholders must be written inside double curly brackets:
 
-Result
-A new Word file will be created in the same folder with the name you specified.
+    {{NAME}}
+    {{AGE}}
+    {{GENDER}}
+    {{DATE}}
+    {{KEY}}
 
-📝 Template requirements
+They will be replaced with the user-provided values.
 
-The template must contain placeholders written in double curly brackets, for example:
+------------------------------------------------------------------------
 
-{{NAME}}
-{{AGE}}
-{{GENDER}}
-{{DATE}}
-{{KEY}}
+### 🧩 Supported Features
 
+-   ✔ Works with .docx templates
+-   ✔ Replaces text in paragraphs
+-   ✔ Replaces text inside Word tables
 
-These placeholders will be replaced with your values.
+------------------------------------------------------------------------
 
-⚠️ Notes
+### ⚠ Notes
 
-The template file must be in .docx format.
+-   The template must be in Microsoft Word (.docx) format
+-   If any required field is empty, the program will show a warning
+-   Output files are saved in the same directory as the application
 
-If some values are missing, the program will show a warning message.
+------------------------------------------------------------------------
 
-Text inside Word tables is also supported.
+## 🛠 Developer Notes
 
-🎯 Example use cases
+Install dependencies:
 
-Generating letters or certificates
+    pip install -r requirements.txt
 
-Creating standardized reports
+Run from source:
 
-Filling document forms
+    python app.py
 
-Automating repeated document creation
+Build executable (PyInstaller):
 
-If you want, I can also:
+    python -m PyInstaller --onefile --noconsole app.py
 
-add screenshots to the guide
-
-make a short README for GitHub
-
-or write a more technical version for developers
+------------------------------------------------------------------------
